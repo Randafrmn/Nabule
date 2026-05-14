@@ -1,5 +1,206 @@
 import Image from "next/image";
 
+type SelectedWorkProject = {
+  id: string;
+  slug: string;
+  image: string;
+  imageAlt: string;
+  logo: string;
+  logoAlt: string;
+  logoWidth: number;
+  logoHeight: number;
+  year: string;
+  description: string;
+  tags: string[];
+};
+
+const projects: SelectedWorkProject[] = [
+  {
+    id: "vela",
+    slug: "véla",
+    image: "/images/vela.png",
+    imageAlt: "Véla — branding and product photography",
+    logo: "/logos/asgardia.svg",
+    logoAlt: "Asgardia",
+    logoWidth: 134,
+    logoHeight: 30,
+    year: "2025",
+    description:
+      "A refined branding project that embodies elegance, simplicity, and timeless design for a luxury lifestyle brand.",
+    tags: ["Logo", "Branding", "Brand Identity"],
+  },
+  {
+    id: "lume",
+    slug: "lume",
+    image: "/images/lume.png",
+    imageAlt: "Lume — marketing campaign photography",
+    logo: "/logos/acme.svg",
+    logoAlt: "Acme",
+    logoWidth: 120,
+    logoHeight: 31,
+    year: "2025",
+    description:
+      "A marketing campaign that amplifies brand presence through strategic storytelling and visually compelling content.",
+    tags: ["Logo", "Branding", "Brand Identity"],
+  },
+  {
+    id: "nexa",
+    slug: "nexa",
+    image: "/images/nexa.png",
+    imageAlt: "Nexa — product photography",
+    logo: "/logos/canba.svg",
+    logoAlt: "Kanba",
+    logoWidth: 111,
+    logoHeight: 30,
+    year: "2025",
+    description:
+      "A social media strategy that builds engagement, strengthens community, and drives brand growth through creative content.",
+    tags: ["Logo", "Branding", "Brand Identity"],
+  },
+];
+
+function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) {
+  return (
+    <div className="relative h-[88vh] min-h-[640px] w-full overflow-hidden rounded-bl-[20px] rounded-tr-[20px]">
+      <Image
+        src={project.image}
+        alt={project.imageAlt}
+        fill
+        className="object-cover object-center"
+        sizes="100vw"
+      />
+
+      <div className="absolute inset-0 z-10 h-full w-full">
+        <div className="pointer-events-none absolute top-8 right-12 md:top-12 md:right-20">
+          <Image
+            src={project.logo}
+            alt={project.logoAlt}
+            width={project.logoWidth}
+            height={project.logoHeight}
+            className="h-5 w-auto brightness-0 invert md:h-7"
+          />
+        </div>
+
+        <p
+          className="pointer-events-none absolute bottom-4 right-3 max-w-[95vw] text-right font-headline font-bold leading-[100%] tracking-[-6px] text-white md:bottom-14 md:right-20"
+          style={{ fontSize: "clamp(3.5rem, 12vw, 140px)" }}
+        >
+          {project.slug}
+        </p>
+
+        <div className="pointer-events-auto absolute bottom-0 right-0">
+          <div className="relative rounded-tl-[20px] bg-[rgba(255,255,255,1)] p-2">
+            <Image
+              src="/images/RoundedEdge.svg"
+              alt=""
+              aria-hidden="true"
+              width={20}
+              height={20}
+              className="pointer-events-none absolute bottom-0 right-full -mr-px block rotate-180"
+            />
+            <Image
+              src="/images/RoundedEdge.svg"
+              alt=""
+              aria-hidden="true"
+              width={20}
+              height={20}
+              className="pointer-events-none absolute bottom-full right-0 -mb-px block rotate-180"
+            />
+            <a
+              href="#work"
+              aria-label={`Open ${project.slug} project`}
+              className="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 12L12 4M12 4H6M12 4V10"
+                  stroke="rgba(255,255,255,1)"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div className="pointer-events-auto absolute bottom-6 left-4 max-w-[min(100%,20rem)] md:bottom-12 md:left-12 md:max-w-[22rem]">
+          <div className="rounded-[16px] bg-[rgba(255,255,255,1)] p-4 md:p-5">
+            <div className="inline-flex items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] p-1 pr-4">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5"
+                    stroke="rgba(255,255,255,1)"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+              <span className="font-display text-[13px] font-medium text-[rgba(32,37,39,1)]">
+                {project.year}
+              </span>
+            </div>
+
+            <p className="mt-3 font-display text-[13px] leading-relaxed text-[rgba(32,37,39,1)] md:text-[14px]">
+              {project.description}
+            </p>
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-[4px] bg-[rgba(246,246,246,1)] px-3 py-1.5 font-display text-[12px] text-[rgba(32,37,39,1)]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="pointer-events-auto absolute left-0 top-0 z-30">
+        <a
+          href="#work"
+          className="relative z-10 inline-flex rounded-br-[20px] bg-[rgba(255,255,255,1)] px-5 py-3 font-display text-[15px] font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
+        >
+          {project.slug}
+        </a>
+        <Image
+          src="/images/RoundedEdge.svg"
+          alt=""
+          aria-hidden="true"
+          width={20}
+          height={20}
+          className="pointer-events-none absolute top-full left-0 block"
+        />
+        <Image
+          src="/images/RoundedEdge.svg"
+          alt=""
+          aria-hidden="true"
+          width={20}
+          height={20}
+          className="pointer-events-none absolute top-0 left-full -ml-px block"
+        />
+      </div>
+    </div>
+  );
+}
+
 export function SelectedWorkSection() {
   return (
     <section
@@ -44,144 +245,10 @@ export function SelectedWorkSection() {
         </div>
 
         <div className="w-full p-3 md:p-4">
-          <div className="relative w-full h-[88vh] min-h-[640px] overflow-hidden">
-            <Image
-              src="/images/vela.png"
-              alt="Véla — branding and product photography"
-              fill
-              className="object-cover object-center"
-              sizes="100vw"
-            />
-
-            <div className="absolute inset-0 z-10 h-full w-full">
-              <div className="pointer-events-none absolute top-8 right-10 md:top-12 md:right-16">
-                <Image
-                  src="/logos/asgardia.svg"
-                  alt="Asgardia"
-                  width={134}
-                  height={30}
-                  className="h-5 w-auto brightness-0 invert md:h-7"
-                />
-              </div>
-
-              <p
-                className="pointer-events-none absolute bottom-4 right-3 max-w-[95vw] text-right font-headline font-bold leading-[100%] tracking-[-6px] text-white md:bottom-14 md:right-16"
-                style={{ fontSize: "clamp(3.5rem, 12vw, 140px)" }}
-              >
-                véla
-              </p>
-
-              <div className="pointer-events-auto absolute bottom-0 right-0">
-                <div className="relative rounded-tl-[20px] bg-[rgba(255,255,255,1)] p-2">
-                  <Image
-                    src="/images/RoundedEdge.svg"
-                    alt=""
-                    aria-hidden="true"
-                    width={20}
-                    height={20}
-                    className="absolute bottom-0 right-full -mr-px rotate-180 pointer-events-none"
-                  />
-                  <Image
-                    src="/images/RoundedEdge.svg"
-                    alt=""
-                    aria-hidden="true"
-                    width={20}
-                    height={20}
-                    className="absolute bottom-full right-0 -mb-px rotate-180 pointer-events-none"
-                  />
-                  <a
-                    href="#work"
-                    aria-label="Open project"
-                    className="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M4 12L12 4M12 4H6M12 4V10"
-                        stroke="rgba(255,255,255,1)"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-
-              <div className="pointer-events-auto absolute bottom-6 left-4 max-w-[min(100%,20rem)] md:bottom-8 md:left-6 md:max-w-[22rem]">
-                <div className="rounded-[16px] bg-[rgba(255,255,255,1)] p-4 md:p-5">
-                  <div className="inline-flex items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] p-1 pr-4">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5"
-                          stroke="rgba(255,255,255,1)"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                    <span className="font-display text-[13px] font-medium text-[rgba(32,37,39,1)]">
-                      2025
-                    </span>
-                  </div>
-
-                  <p className="mt-3 font-display text-[13px] leading-relaxed text-[rgba(32,37,39,1)] md:text-[14px]">
-                    A refined branding project that embodies elegance,
-                    simplicity, and timeless design for a luxury lifestyle
-                    brand.
-                  </p>
-
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {["Logo", "Branding", "Brand Identity"].map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-[4px] bg-[rgba(246,246,246,1)] px-3 py-1.5 font-display text-[12px] text-[rgba(32,37,39,1)]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pointer-events-auto absolute left-0 top-0 z-30">
-              <a
-                href="#work"
-                className="relative z-10 inline-flex bg-[rgba(255,255,255,1)] px-5 py-3 font-display text-[15px] font-medium text-[rgba(32,37,39,1)] rounded-br-[20px] transition-opacity"
-              >
-                véla
-              </a>
-              <Image
-                src="/images/RoundedEdge.svg"
-                alt=""
-                aria-hidden="true"
-                width={20}
-                height={20}
-                className="pointer-events-none absolute top-full left-0 block"
-              />
-              <Image
-                src="/images/RoundedEdge.svg"
-                alt=""
-                aria-hidden="true"
-                width={20}
-                height={20}
-                className="pointer-events-none absolute top-0 left-full -ml-px block"
-              />
-            </div>
+          <div className="flex flex-col gap-2">
+            {projects.map((project) => (
+              <SelectedWorkProjectCard key={project.id} project={project} />
+            ))}
           </div>
         </div>
       </div>
