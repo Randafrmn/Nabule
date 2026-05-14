@@ -73,15 +73,15 @@ function ServiceDetailCard({ item }: { item: ServiceDetail }) {
       : "font-headline";
 
   return (
-    <article className="relative rounded-[20px] bg-[rgba(246,246,246,1)] p-3 md:p-4">
-      <div className="absolute top-0 right-0 z-10 inline-flex items-center gap-1.5 rounded-bl-[18px] bg-[rgba(255,255,255,1)] pb-2 pl-3 pr-3">
+    <article className="relative overflow-hidden rounded-b-[20px] bg-[rgba(246,246,246,1)] pt-0 md:rounded-[20px] md:p-4">
+      <div className="absolute top-0 right-0 z-10 hidden items-center gap-1.5 rounded-bl-[18px] bg-[rgba(255,255,255,1)] pb-2 pl-3 pr-3 md:inline-flex">
         <Image
           src="/images/RoundedEdge.svg"
           alt=""
           aria-hidden="true"
           width={20}
           height={20}
-          className="absolute top-0 right-full -mr-px rotate-90 pointer-events-none"
+          className="pointer-events-none absolute top-0 right-full -mr-px rotate-90"
         />
         <Image
           src="/images/RoundedEdge.svg"
@@ -89,7 +89,7 @@ function ServiceDetailCard({ item }: { item: ServiceDetail }) {
           aria-hidden="true"
           width={20}
           height={20}
-          className="absolute top-full right-0 -mt-px rotate-90 pointer-events-none"
+          className="pointer-events-none absolute top-full right-0 -mt-px rotate-90"
         />
         <span className="inline-flex h-5 w-5 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] font-display text-[9px] font-medium text-white">
           {item.id}
@@ -99,18 +99,26 @@ function ServiceDetailCard({ item }: { item: ServiceDetail }) {
         </span>
       </div>
 
-      <div className="flex flex-col gap-4 md:flex-row">
-        <div className="relative h-44 w-full shrink-0 overflow-hidden rounded-[12px] md:h-[170px] md:w-[140px]">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-4">
+        <div className="relative w-full shrink-0 overflow-hidden rounded-none md:h-[170px] md:w-[140px] md:rounded-[12px]">
+          <Image
+            src={item.image}
+            alt={`${item.titleStart} ${item.titleEnd}`}
+            width={365}
+            height={417}
+            className="h-auto w-full md:hidden"
+            sizes="(max-width: 767px) 100vw, 140px"
+          />
           <Image
             src={item.image}
             alt={`${item.titleStart} ${item.titleEnd}`}
             fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 20vw"
+            className="hidden object-cover md:block"
+            sizes="140px"
           />
         </div>
 
-        <div className="flex flex-1 flex-col justify-between gap-4 pr-1 pt-1 md:pt-6">
+        <div className="flex flex-1 flex-col justify-between gap-4 px-3 pb-3 pt-0 md:px-0 md:pb-0 md:pt-6 md:pr-1">
           <div>
             <h3 className="text-[20px] leading-tight text-[rgba(32,37,39,1)] md:text-[22px]">
               <span className={startClass}>{item.titleStart}</span>{" "}
@@ -195,7 +203,7 @@ export function AboutSection() {
           </div>
         </div>
 
-        <div className="w-full pb-12 md:pb-16 px-6 md:px-22">
+        <div className="w-full px-6 pb-12 md:px-22 md:pb-16">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {serviceDetails.map((item) => (
               <ServiceDetailCard key={item.id} item={item} />

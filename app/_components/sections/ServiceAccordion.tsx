@@ -192,7 +192,7 @@ function ServiceCard({
             </p>
 
             <div className="mt-4">
-              <ServiceTagsMarquee tags={service.tags} />
+              <ServiceTagsMarquee tags={service.tags} speed={36} />
             </div>
           </div>
         </div>

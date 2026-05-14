@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Navbar() {
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 w-full pointer-events-none">
+    <header className="pointer-events-none absolute left-0 right-0 top-0 z-50 hidden w-full md:block">
       <div className="pointer-events-auto absolute top-5 md:top-4 left-5 md:left-4">
         <a
           href="#"

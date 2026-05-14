@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SelectedWorkLogoMarquee } from "./SelectedWorkLogoMarquee";
 
 type SelectedWorkProject = {
   id: string;
@@ -59,9 +60,31 @@ const projects: SelectedWorkProject[] = [
   },
 ];
 
+function ArrowRightIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5"
+        stroke="rgba(255,255,255,1)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) {
   return (
-    <div className="relative h-[88vh] min-h-[640px] w-full overflow-hidden rounded-bl-[20px] rounded-tr-[20px]">
+    <div
+      className="relative aspect-square w-full overflow-hidden rounded-bl-[20px] rounded-br-[20px] rounded-tl-[20px] rounded-tr-none md:aspect-auto md:h-[88vh] md:min-h-[640px] md:rounded-bl-[20px] md:rounded-br-none md:rounded-tl-none md:rounded-tr-[20px]"
+    >
       <Image
         src={project.image}
         alt={project.imageAlt}
@@ -70,8 +93,61 @@ function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) 
         sizes="100vw"
       />
 
-      <div className="absolute inset-0 z-10 h-full w-full">
-        <div className="pointer-events-none absolute top-8 right-12 md:top-12 md:right-20">
+      <Image
+        src="/images/RoundedEdge.svg"
+        alt=""
+        aria-hidden="true"
+        width={20}
+        height={20}
+        className="pointer-events-none absolute left-0 top-0 z-20 md:hidden"
+      />
+      <Image
+        src="/images/RoundedEdge.svg"
+        alt=""
+        aria-hidden="true"
+        width={20}
+        height={20}
+        className="pointer-events-none absolute bottom-0 right-0 z-20 rotate-180 md:hidden"
+      />
+
+      <div className="pointer-events-auto absolute left-6 top-12 z-[24] md:hidden">
+        <SelectedWorkLogoMarquee
+          logoSrc={project.logo}
+          logoAlt={project.logoAlt}
+          logoWidth={project.logoWidth}
+          logoHeight={project.logoHeight}
+        />
+      </div>
+
+      <div className="pointer-events-auto absolute right-0 top-0 z-30 md:hidden">
+        <div className="relative rounded-bl-[18px] bg-[rgba(255,255,255,1)] pb-2 pl-2 pt-0 pr-0">
+          <Image
+            src="/images/RoundedEdge.svg"
+            alt=""
+            aria-hidden="true"
+            width={20}
+            height={20}
+            className="pointer-events-none absolute right-0 top-full -mt-px rotate-90"
+          />
+          <a
+            href="#work"
+            aria-label={`Open ${project.slug} project`}
+            className="relative z-10 inline-flex h-8 w-10 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
+          >
+            <ArrowRightIcon />
+          </a>
+        </div>
+      </div>
+
+      <p
+        className="pointer-events-none absolute bottom-6 left-6 z-20 font-headline font-bold leading-none tracking-tight text-white md:hidden"
+        style={{ fontSize: "clamp(2.25rem, 10vw, 3.5rem)" }}
+      >
+        {project.slug}
+      </p>
+
+      <div className="pointer-events-none absolute inset-0 z-10 hidden h-full w-full md:block">
+        <div className="pointer-events-none absolute right-12 top-8 md:right-20 md:top-12">
           <Image
             src={project.logo}
             alt={project.logoAlt}
@@ -173,7 +249,7 @@ function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) 
         </div>
       </div>
 
-      <div className="pointer-events-auto absolute left-0 top-0 z-30">
+      <div className="pointer-events-auto absolute left-0 top-0 z-30 hidden md:block">
         <a
           href="#work"
           className="relative z-10 inline-flex rounded-br-[20px] bg-[rgba(255,255,255,1)] px-5 py-3 font-display text-[15px] font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
@@ -186,7 +262,7 @@ function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) 
           aria-hidden="true"
           width={20}
           height={20}
-          className="pointer-events-none absolute top-full left-0 block"
+          className="pointer-events-none absolute left-0 top-full block"
         />
         <Image
           src="/images/RoundedEdge.svg"
@@ -194,7 +270,7 @@ function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) 
           aria-hidden="true"
           width={20}
           height={20}
-          className="pointer-events-none absolute top-0 left-full -ml-px block"
+          className="pointer-events-none absolute left-full top-0 -ml-px block"
         />
       </div>
     </div>
@@ -211,7 +287,7 @@ export function SelectedWorkSection() {
       <div className="w-full">
         <div className="px-3 md:px-4">
           <div className="px-6 pb-6 md:px-22 md:pb-8">
-            <div className="flex items-end justify-between gap-6">
+            <div className="flex flex-col items-center gap-5 text-center md:flex-row md:items-end md:justify-between md:text-left">
               <h2 className="text-[clamp(2rem,6vw,4.5rem)] leading-none text-[rgba(32,37,39,1)]">
                 <span className="font-serif italic font-normal">Selected</span>{" "}
                 <span className="font-headline font-bold">Work</span>
