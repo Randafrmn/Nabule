@@ -6,6 +6,7 @@ import { AboutSection } from "./_components/sections/AboutSection";
 import { SelectedWorkSection } from "./_components/sections/SelectedWorkSection";
 import { TestimonialsSection } from "./_components/sections/TestimonialsSection";
 import { ExperienceSection } from "./_components/sections/ExperienceSection";
+import { JourneySection } from "./_components/sections/JourneySection";
 import { PricingSection } from "./_components/sections/PricingSection";
 import { FaqSection } from "./_components/sections/FaqSection";
 import { CtaSection } from "./_components/sections/CtaSection";
@@ -24,7 +25,7 @@ export default function Home() {
         <ExperienceSection />
         <PricingSection />
         <FaqSection />
-        <CtaSection />
+        <JourneySection />
         <LatestNewsSection />
       </main>
       <Footer />
