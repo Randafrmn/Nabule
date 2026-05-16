@@ -194,7 +194,7 @@
           aria-hidden
           width={20}
           height={20}
-          className="pointer-events-none absolute top-full left-0"
+          className="pointer-events-none absolute top-full left-0 hidden lg:block"
         />
         <Image
           src="/images/RoundedEdge.svg"
@@ -202,16 +202,28 @@
           aria-hidden
           width={20}
           height={20}
-          className="pointer-events-none absolute top-0 left-full -ml-px"
+          className="pointer-events-none absolute top-0 left-full -ml-px hidden lg:block"
         />
       </div>
     );
   }
 
-  function JourneyCardContent({ step }: { step: JourneyStep }) {
+  function JourneyCardContent({
+    step,
+    mobile = false,
+  }: {
+    step: JourneyStep;
+    mobile?: boolean;
+  }) {
     return (
       <>
-        <h3 className="font-headline text-[17px] font-bold leading-[1.15] tracking-tight text-[rgba(32,37,39,1)] md:text-lg">
+        <h3
+          className={`font-headline font-semibold leading-[1.15] tracking-tight text-[rgba(32,37,39,1)] md:text-lg ${
+            mobile
+              ? "text-[16px] sm:text-[17px]"
+              : "text-[17px]"
+          }`}
+        >
           {step.titleLines.map((line) => (
             <span key={line} className="block">
               {line}
@@ -219,19 +231,33 @@
           ))}
         </h3>
 
-        <p className="mt-2.5 flex-1 font-display text-[13px] leading-snug text-[rgba(32,37,39,0.6)] md:text-[13px]">
+        <p
+          className={`flex-1 font-display text-[13px] leading-snug text-[rgba(32,37,39,0.6)] md:text-[13px] ${
+            mobile ? "mt-3.5 sm:mt-4" : "mt-2.5"
+          }`}
+        >
           {step.description}
         </p>
 
-        <div className="mt-3 w-full rounded-[12px] bg-[rgba(255,255,255,1)] p-3">
-          <p className="font-headline text-xs font-bold text-[rgba(32,37,39,1)] md:text-[13px]">
+        <div
+          className={`w-full rounded-[12px] bg-[rgba(255,255,255,1)] ${
+            mobile
+              ? "mt-4 rounded-[14px] p-3.5 sm:p-4"
+              : "mt-3 p-3"
+          }`}
+        >
+          <p className="font-headline text-xs font-semibold text-[rgba(32,37,39,1)] md:text-[13px]">
             {step.milestonesTitle}
           </p>
-          <div className="mt-2 flex flex-col gap-1.5">
+          <div
+            className={`flex flex-col ${mobile ? "mt-2.5 gap-2 sm:mt-3" : "mt-2 gap-1.5"}`}
+          >
             {step.tags.map((tag) => (
               <span
                 key={tag}
-                className="journey-card-tag inline-flex w-fit rounded-[4px] bg-[rgba(246,246,246,1)] px-2 py-1 font-display text-[11px] leading-tight text-[rgba(32,37,39,1)] md:text-xs"
+                className={`journey-card-tag inline-flex w-fit rounded-[4px] bg-[rgba(246,246,246,1)] px-2 py-1 font-display leading-tight text-[rgba(32,37,39,1)] md:text-xs ${
+                  mobile ? "text-[11px] sm:text-[12px]" : "text-[11px]"
+                }`}
               >
                 {tag}
               </span>
@@ -246,7 +272,7 @@
     "relative box-border flex h-[calc((100%-0.75rem)/2)] min-h-0 shrink-0 flex-col overflow-hidden rounded-[20px] rounded-tl-none bg-[rgba(246,246,246,1)] p-3.5 pt-10 md:p-6 md:pt-12";
 
   const journeyCardMobileClassName =
-    "relative flex flex-col overflow-hidden rounded-[20px] rounded-tl-none bg-[rgba(246,246,246,1)] p-3.5 pt-10 md:p-4 md:pt-11";
+    "relative flex min-h-0 flex-col overflow-hidden rounded-[20px] rounded-tl-none bg-[rgba(246,246,246,1)] px-4 pb-4 pt-[2.65rem] sm:px-5 sm:pb-5 sm:pt-11 md:px-6 md:pb-6 md:pt-12";
 
   function JourneyCard({
     step,
@@ -260,8 +286,8 @@
         className={`${mobile ? journeyCardMobileClassName : journeyCardClassName} journey-card${mobile ? " journey-card--mobile" : ""}`}
       >
         <StepTab number={step.number} label={step.label} />
-        <div className="journey-card-inner flex flex-1 flex-col">
-          <JourneyCardContent step={step} />
+        <div className="journey-card-inner flex min-h-0 flex-1 flex-col">
+          <JourneyCardContent step={step} mobile={mobile} />
         </div>
       </article>
     );
