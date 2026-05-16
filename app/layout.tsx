@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { InitialLoader } from "./_components/layout/InitialLoader";
+import { SmoothHashNavigation } from "./_components/layout/SmoothHashNavigation";
 
 const figtree = Figtree({
   variable: "--font-figtree",
@@ -56,6 +57,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <SmoothHashNavigation />
         <InitialLoader />
       </body>
     </html>

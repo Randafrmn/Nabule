@@ -7,7 +7,7 @@ const links = [
   { href: "#work", label: "Work" },
   { href: "#about", label: "About" },
   { href: "#news", label: "Blog" },
-  { href: "#contact", label: "Contact" },
+  { href: "#faq", label: "Contact" },
 ] as const;
 
 function getHeroScrollThreshold(): number {
@@ -162,7 +162,7 @@ export function HeroScrollRevealNav() {
         </nav>
 
         <a
-          href="#contact"
+          href="#pricing"
           className="inline-flex shrink-0 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] px-2.5 py-1 font-display text-[11px] font-medium text-[rgba(255,255,255,1)] transition-opacity hover:opacity-90 sm:px-3 sm:py-1 sm:text-xs md:text-[13px]"
         >
           Start Project

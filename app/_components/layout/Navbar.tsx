@@ -78,7 +78,7 @@ export function Navbar() {
         </div>
         <div className="relative z-10">
           <a
-            href="#contact"
+            href="#faq"
             className="font-sans text-foreground rounded-full px-3 py-1 text-sm font-medium inline-block hover:bg-foreground/5 transition-colors"
           >
             Contact
@@ -106,7 +106,7 @@ export function Navbar() {
         />
 
         <a
-          href="#contact"
+          href="#pricing"
           className="relative z-10 font-sans text-background inline-flex items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] px-3 py-1 text-sm font-medium hover:opacity-90 transition-opacity"
         >
           Start Project

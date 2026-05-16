@@ -11,7 +11,7 @@ const links = [
   { href: "#work", label: "Work" },
   { href: "#about", label: "About" },
   { href: "#news", label: "Blog" },
-  { href: "#contact", label: "Contact" },
+  { href: "#faq", label: "Contact" },
 ];
 
 export function HeroMobileNav() {
@@ -162,7 +162,7 @@ export function HeroMobileNav() {
 
             <div className="mobile-nav-item mt-auto pt-10">
               <a
-                href="#contact"
+                href="#pricing"
                 className="inline-flex w-full items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] px-6 py-3.5 font-display text-sm font-medium text-white transition-opacity hover:opacity-90"
                 onClick={() => animateClose()}
               >

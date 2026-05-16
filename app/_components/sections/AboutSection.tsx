@@ -156,8 +156,8 @@ export function AboutSection() {
         <div className="w-full bg-[rgba(255,255,255,1)] py-16 md:py-24 px-6 md:px-22">
           <div className="flex flex-col items-start gap-8 md:flex-row md:items-start md:justify-between md:gap-8">
             <div className="shrink-0">
-              <button
-                type="button"
+              <a
+                href="#journey"
                 className="inline-flex items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] p-1.5 pr-5 font-display text-[15px] font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
               >
                 <span className="inline-flex h-6 w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
@@ -178,7 +178,7 @@ export function AboutSection() {
                   </svg>
                 </span>
                 <span>About Us</span>
-              </button>
+              </a>
             </div>
 
             <div>

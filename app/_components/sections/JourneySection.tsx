@@ -163,7 +163,7 @@
               execution, guiding your brand from concept to launch.
             </p>
             <Link
-              href="#contact"
+              href="#faq"
               className="mt-6 inline-flex w-fit items-center gap-2 rounded-[500px] bg-[rgba(255,255,255,1)] py-1.5 pl-1.5 pr-4 font-display text-sm font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
             >
               <span className="inline-flex h-6 w-8 shrink-0 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
