@@ -1,11 +1,8 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { useLayoutEffect, useRef, useState } from "react";
-
-gsap.registerPlugin(useGSAP);
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 const STAR_COUNT = 5;
 
@@ -274,330 +271,59 @@ function TestimonialCarouselCard({
 
 function TestimonialsMobileCarousel() {
   const slideCount = gridTestimonials.length;
-  /** Extended track: [clone last, ...items, clone first] for infinite loop. Real slides sit at 1..slideCount. */
-  const extendedSlides =
-    slideCount > 0
-      ? [
-          gridTestimonials[slideCount - 1]!,
-          ...gridTestimonials,
-          gridTestimonials[0]!,
-        ]
-      : [];
 
-  const maxVisual = slideCount > 0 ? slideCount + 1 : 0;
-
-  const [visualIndex, setVisualIndex] = useState(1);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const visualIndexRef = useRef(visualIndex);
-  /** True while user is dragging on horizontal axis — skip useGSAP position tween (avoids fighting). */
-  const draggingRef = useRef(false);
-
-  useLayoutEffect(() => {
-    visualIndexRef.current = visualIndex;
-  }, [visualIndex]);
-
-  /** Dot / aria: logical slide 0..slideCount-1 from extended index. */
-  const activeLogical =
-    slideCount > 0
-      ? visualIndex <= 0
-        ? slideCount - 1
-        : visualIndex >= slideCount + 1
-          ? 0
-          : visualIndex - 1
-      : 0;
-
-  const pointerDownRef = useRef(false);
-  const dragAxisRef = useRef<"none" | "h" | "v">("none");
-  const dragStartPointerRef = useRef({ x: 0, y: 0 });
-  const capturePointerIdRef = useRef<number | null>(null);
-  /** Recent moves for flick velocity (screen coords, ms). */
-  const recentMovesRef = useRef<{ t: number; x: number }[]>([]);
-  const lastClientXRef = useRef(0);
-
-  const DURATION = 0.5;
-  const EASE = "power2.out";
-  const EPS = 1.25;
-
-  /** Instant wrap + deferred React sync — avoids killTween + flush jank on loop boundary. */
-  function teleportCloneIfNeeded(track: HTMLDivElement, w: number, v: number) {
-    if (slideCount <= 0) return;
-    if (v === 0) {
-      gsap.set(track, { x: -slideCount * w });
-      visualIndexRef.current = slideCount;
-      queueMicrotask(() => {
-        setVisualIndex(slideCount);
-      });
-    } else if (v === slideCount + 1) {
-      gsap.set(track, { x: -w });
-      visualIndexRef.current = 1;
-      queueMicrotask(() => {
-        setVisualIndex(1);
-      });
-    }
-  }
-
-  useGSAP(
-    () => {
-      const viewport = viewportRef.current;
-      const track = trackRef.current;
-      if (!viewport || !track || slideCount === 0) return;
-
-      if (draggingRef.current) return;
-
-      const slideWidth = (): number => {
-        const width = viewport.offsetWidth;
-        Array.from(track.children).forEach((node) => {
-          const el = node as HTMLElement;
-          el.style.flexShrink = "0";
-          el.style.width = `${width}px`;
-        });
-        return width;
-      };
-
-      const w = slideWidth();
-      const targetX = -visualIndex * w;
-      const curX = Number(gsap.getProperty(track, "x")) || 0;
-      const atTarget = Math.abs(curX - targetX) < EPS;
-
-      const ro = new ResizeObserver(() => {
-        if (draggingRef.current) return;
-        const nw = slideWidth();
-        const vx = visualIndexRef.current;
-        gsap.set(track, { x: -vx * nw });
-      });
-      ro.observe(viewport);
-
-      if (atTarget) {
-        if (visualIndex === 0 || visualIndex === slideCount + 1) {
-          teleportCloneIfNeeded(track, w, visualIndex);
-        } else {
-          gsap.set(track, { x: targetX });
-        }
-      } else {
-        gsap.killTweensOf(track);
-        gsap.to(track, {
-          x: targetX,
-          duration: DURATION,
-          ease: EASE,
-          overwrite: "auto",
-          onComplete: () => {
-            if (visualIndex === 0 || visualIndex === slideCount + 1) {
-              teleportCloneIfNeeded(track, w, visualIndex);
-            }
-          },
-        });
-      }
-
-      return () => {
-        ro.disconnect();
-      };
-    },
-    { dependencies: [visualIndex, slideCount] },
+  const emblaOptions = useMemo(
+    () =>
+      ({
+        axis: "x" as const,
+        loop: slideCount > 1,
+        align: "start" as const,
+        dragFree: false,
+        containScroll: "trimSnaps" as const,
+      }) satisfies NonNullable<Parameters<typeof useEmblaCarousel>[0]>,
+    [slideCount],
   );
 
-  function releasePointer(el: HTMLElement) {
-    const id = capturePointerIdRef.current;
-    if (id != null && el.hasPointerCapture(id)) {
-      el.releasePointerCapture(id);
-    }
-    capturePointerIdRef.current = null;
-    pointerDownRef.current = false;
-    dragAxisRef.current = "none";
-    recentMovesRef.current = [];
-  }
+  const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions);
 
-  function settleAfterDrag(viewport: HTMLDivElement, track: HTMLDivElement) {
-    const w = viewport.offsetWidth;
-    if (w <= 0 || slideCount === 0 || maxVisual <= 0) return;
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-    draggingRef.current = false;
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-    const xfRaw = Number(gsap.getProperty(track, "x")) || 0;
-    const prev = visualIndexRef.current;
-    const actualDx = lastClientXRef.current - dragStartPointerRef.current.x;
-    const thr = Math.max(48, w * 0.18);
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
-    const hist = recentMovesRef.current;
-    let next = prev;
-    let velocitySwipe = 0;
-    if (hist.length >= 2) {
-      const newest = hist[hist.length - 1];
-      const oldest = hist[0];
-      const dt = newest.t - oldest.t;
-      if (dt > 0 && dt < 280) {
-        velocitySwipe = (newest.x - oldest.x) / dt;
-      }
-    }
+  const scrollTo = useCallback(
+    (i: number) => {
+      emblaApi?.scrollTo(i);
+    },
+    [emblaApi],
+  );
 
-    if (velocitySwipe < -0.42) {
-      next = Math.min(maxVisual, prev + 1);
-    } else if (velocitySwipe > 0.42) {
-      next = Math.max(0, prev - 1);
-    } else if (actualDx <= -thr) {
-      next = Math.min(maxVisual, prev + 1);
-    } else if (actualDx >= thr) {
-      next = Math.max(0, prev - 1);
-    } else {
-      next = Math.round(-xfRaw / w);
-      next = Math.max(0, Math.min(maxVisual, next));
-    }
-
-    if (next !== prev) {
-      setVisualIndex(next);
-      return;
-    }
-
-    gsap.killTweensOf(track);
-    gsap.to(track, {
-      x: -next * w,
-      duration: DURATION,
-      ease: EASE,
-      overwrite: "auto",
-      onComplete: () => {
-        if (next === 0 || next === slideCount + 1) {
-          teleportCloneIfNeeded(track, w, next);
-        }
-      },
-    });
-  }
-
-  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
-    if (e.button !== 0) return;
-    pointerDownRef.current = true;
-    dragAxisRef.current = "none";
-    dragStartPointerRef.current = { x: e.clientX, y: e.clientY };
-    lastClientXRef.current = e.clientX;
-    recentMovesRef.current = [{ t: e.timeStamp, x: e.clientX }];
-  }
-
-  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    const viewport = viewportRef.current;
-    const track = trackRef.current;
-    if (!viewport || !track || !pointerDownRef.current) return;
-
-    const dx = e.clientX - dragStartPointerRef.current.x;
-    const dy = e.clientY - dragStartPointerRef.current.y;
-
-    if (dragAxisRef.current === "none") {
-      const adx = Math.abs(dx);
-      const ady = Math.abs(dy);
-      if (adx < 10 && ady < 10) return;
-      if (ady > adx * 1.15) {
-        pointerDownRef.current = false;
-        recentMovesRef.current = [];
-        return;
-      }
-      dragAxisRef.current = "h";
-      draggingRef.current = true;
-      capturePointerIdRef.current = e.pointerId;
-      try {
-        e.currentTarget.setPointerCapture(e.pointerId);
-      } catch {
-        /* ignore */
-      }
-      gsap.killTweensOf(track);
-    }
-
-    if (dragAxisRef.current !== "h") return;
-
-    lastClientXRef.current = e.clientX;
-
-    const now = e.timeStamp;
-    const hist = recentMovesRef.current;
-    hist.push({ t: now, x: e.clientX });
-    const cutoff = now - 100;
-    while (hist.length > 1 && hist[0].t < cutoff) {
-      hist.shift();
-    }
-
-    const w = viewport.offsetWidth;
-    if (w <= 0) return;
-
-    const a = visualIndexRef.current;
-    const minX = -maxVisual * w;
-    const dragDx = e.clientX - dragStartPointerRef.current.x;
-    let x = -a * w + dragDx;
-    const pad = 12;
-    const maxOver = pad;
-    if (x > maxOver) x = maxOver + (x - maxOver) * 0.22;
-    if (x < minX - maxOver)
-      x = minX - maxOver + (x - (minX - maxOver)) * 0.22;
-    gsap.set(track, {
-      x: Math.max(minX - pad * 2, Math.min(pad * 2, x)),
-    });
-  }
-
-  function onPointerUp(e: React.PointerEvent<HTMLDivElement>) {
-    const viewport = viewportRef.current;
-    const track = trackRef.current;
-
-    const wasDown = pointerDownRef.current;
-    const wasHorizontal = dragAxisRef.current === "h";
-
-    if (viewport && track && wasDown && wasHorizontal) {
-      settleAfterDrag(viewport, track);
-    }
-
-    releasePointer(e.currentTarget);
-  }
-
-  function onPointerCancel(e: React.PointerEvent<HTMLDivElement>) {
-    const viewport = viewportRef.current;
-    const track = trackRef.current;
-    const wasHorizontal = dragAxisRef.current === "h";
-
-    if (viewport && track && wasHorizontal && draggingRef.current) {
-      settleAfterDrag(viewport, track);
-    }
-
-    releasePointer(e.currentTarget);
-  }
-
-  function onLostPointerCapture(e: React.PointerEvent<HTMLDivElement>) {
-    const viewport = viewportRef.current;
-    const track = trackRef.current;
-    if (!viewport || !track) return;
-    if (e.pointerId !== capturePointerIdRef.current) return;
-    const wasHorizontal = dragAxisRef.current === "h";
-
-    if (draggingRef.current && wasHorizontal) {
-      settleAfterDrag(viewport, track);
-    }
-
-    capturePointerIdRef.current = null;
-    pointerDownRef.current = false;
-    dragAxisRef.current = "none";
-    recentMovesRef.current = [];
-  }
+  if (slideCount === 0) return null;
 
   return (
     <div className="rounded-[20px] bg-[rgba(246,246,246,1)] pb-8 pt-6">
       <div
-        ref={viewportRef}
-        role="presentation"
-        className="relative w-full select-none overflow-hidden touch-pan-y"
+        className="overflow-hidden"
+        ref={emblaRef}
         style={{ touchAction: "pan-y pinch-zoom" }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerCancel}
-        onLostPointerCapture={onLostPointerCapture}
       >
-        <div
-          ref={trackRef}
-          className="flex flex-row flex-nowrap will-change-transform"
-        >
-          {extendedSlides.map((item, idx) => (
+        <div className="flex">
+          {gridTestimonials.map((item) => (
             <div
-              key={
-                idx === 0
-                  ? `loop-before:${item.title}`
-                  : idx === extendedSlides.length - 1
-                    ? `loop-after:${item.title}`
-                    : `${idx}:${item.title}`
-              }
-              className="box-border shrink-0"
+              key={item.title}
+              className="min-w-0 shrink-0 grow-0 basis-full"
             >
               <div className="px-6 md:px-1">
                 <TestimonialCarouselCard item={item} eagerAvatar />
@@ -618,11 +344,11 @@ function TestimonialsMobileCarousel() {
               key={item.title}
               type="button"
               role="tab"
-              aria-selected={i === activeLogical}
+              aria-selected={i === selectedIndex}
               aria-label={`Testimonial ${i + 1} of ${gridTestimonials.length}`}
-              onClick={() => setVisualIndex(i + 1)}
+              onClick={() => scrollTo(i)}
               className={`h-2 w-2 shrink-0 rounded-[50px] bg-[rgba(255,255,255,1)] transition-opacity ${
-                i === activeLogical ? "opacity-100" : "opacity-[0.4]"
+                i === selectedIndex ? "opacity-100" : "opacity-[0.4]"
               }`}
             />
           ))}
