@@ -82,7 +82,10 @@ function FooterCornerLeftCredits() {
         className="pointer-events-none absolute bottom-0 left-full -ml-px hidden rotate-x-180 md:block"
       />
       <p className="relative z-10 font-display text-xs font-normal text-[rgba(32,37,39,1)] md:text-sm">
-        © Gola Templates
+        <span className="md:hidden">© Gola Templates</span>
+        <span className="hidden md:inline">
+          © Created by Gola Templates
+        </span>
       </p>
     </div>
   );
