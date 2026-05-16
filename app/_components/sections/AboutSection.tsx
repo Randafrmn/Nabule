@@ -91,7 +91,7 @@ function ServiceDetailCard({ item }: { item: ServiceDetail }) {
           height={20}
           className="pointer-events-none absolute top-full right-0 -mt-px rotate-90"
         />
-        <span className="inline-flex h-5 w-5 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] font-display text-[9px] font-medium text-white">
+        <span className="inline-flex h-5 w-6 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] font-display text-[9px] font-medium text-white">
           {item.id}
         </span>
         <span className="font-display text-[11px] font-medium text-[rgba(32,37,39,1)]">
@@ -160,7 +160,7 @@ export function AboutSection() {
                 type="button"
                 className="inline-flex items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] p-1.5 pr-5 font-display text-[15px] font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
               >
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
+                <span className="inline-flex h-6 w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
                   <svg
                     width="16"
                     height="16"

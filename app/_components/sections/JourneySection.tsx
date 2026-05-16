@@ -2,7 +2,7 @@
 
   import Image from "next/image";
   import Link from "next/link";
-  import { useLayoutEffect, useRef, type RefObject } from "react";
+  import { useLayoutEffect, useRef, useState, type RefObject } from "react";
   import gsap from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   import { useGSAP } from "@gsap/react";
@@ -99,33 +99,43 @@
 
   function OurProcessTab() {
     return (
-      <div className="absolute bottom-0 right-0 z-10 rounded-tl-[20px] bg-[rgba(255,255,255,1)] px-4 py-2.5">
-        <Image
-          src="/images/RoundedEdge.svg"
-          alt=""
-          aria-hidden
-          width={20}
-          height={20}
-          className="pointer-events-none absolute bottom-0 right-full -mr-px rotate-180"
-        />
-        <Image
-          src="/images/RoundedEdge.svg"
-          alt=""
-          aria-hidden
-          width={20}
-          height={20}
-          className="pointer-events-none absolute bottom-full right-0 rotate-180 -mb-px"
-        />
-        <span className="relative z-10 font-display text-sm font-medium text-[rgba(32,37,39,1)]">
-          Our Process
-        </span>
-      </div>
+      <>
+        {/* Mobile / tablet journey layout: top-right, no RoundedEdge */}
+        <div className="absolute top-0 right-0 z-10 rounded-bl-[20px] bg-[rgba(255,255,255,1)] px-4 py-2.5 lg:hidden">
+          <span className="font-display text-sm font-medium text-[rgba(32,37,39,1)]">
+            Our Process
+          </span>
+        </div>
+
+        {/* Desktop journey layout (lg+): bottom-right + RoundedEdge.svg */}
+        <div className="absolute bottom-0 right-0 z-10 hidden rounded-tl-[20px] bg-[rgba(255,255,255,1)] px-4 py-2.5 lg:block">
+          <Image
+            src="/images/RoundedEdge.svg"
+            alt=""
+            aria-hidden
+            width={20}
+            height={20}
+            className="pointer-events-none absolute bottom-0 right-full -mr-px rotate-180"
+          />
+          <Image
+            src="/images/RoundedEdge.svg"
+            alt=""
+            aria-hidden
+            width={20}
+            height={20}
+            className="pointer-events-none absolute bottom-full right-0 rotate-180 -mb-px"
+          />
+          <span className="relative z-10 font-display text-sm font-medium text-[rgba(32,37,39,1)]">
+            Our Process
+          </span>
+        </div>
+      </>
     );
   }
 
   function JourneyHeroPanel() {
     return (
-      <div className="relative h-full min-h-[280px] w-full overflow-hidden rounded-[20px] rounded-br-none md:min-h-0">
+      <div className="relative h-full min-h-[280px] w-full overflow-hidden rounded-[20px] rounded-tr-[0px] md:rounded-tr-[20px] rounded-br-[20px] md:rounded-br-none md:min-h-0">
         <Image
           src="/images/journey.png"
           alt="Metallic creative journey visual"
@@ -136,7 +146,7 @@
 
         <OurProcessTab />
 
-        <div className="absolute inset-0 z-10 flex flex-col justify-end p-5 pb-8 md:p-8 md:pb-10 lg:p-10">
+        <div className="absolute inset-0 z-10 flex flex-col justify-end p-5 pb-8 md:p-8 md:pb-10 lg:p-14">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -171,7 +181,7 @@
     return (
       <div className="absolute top-0 left-0 z-10">
         <div className="relative z-10 inline-flex items-center gap-1.5 rounded-br-[20px] bg-[rgba(255,255,255,1)] pb-2 pl-2 pr-3 pt-2">
-          <span className="inline-flex h-4 w-5 shrink-0 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] font-display text-[10px] font-medium text-[rgba(255,255,255,1)]">
+          <span className="inline-flex h-5 w-6 shrink-0 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] font-display text-[10px] font-medium text-[rgba(255,255,255,1)]">
             {number}
           </span>
           <span className="font-display text-xs font-medium text-[rgba(32,37,39,1)] md:text-sm">
@@ -413,6 +423,12 @@
 
   function JourneyMobileLayout() {
     const listRef = useRef<HTMLDivElement>(null);
+    const [showAllMobile, setShowAllMobile] = useState(false);
+
+    const mobileSteps = showAllMobile
+      ? journeySteps
+      : journeySteps.slice(0, VISIBLE_CARDS);
+    const hasMoreMobile = journeySteps.length > VISIBLE_CARDS;
 
     useGSAP(
       () => {
@@ -474,7 +490,7 @@
 
         return () => ctx.revert();
       },
-      { scope: listRef, revertOnUpdate: true },
+      { scope: listRef, dependencies: [showAllMobile], revertOnUpdate: true },
     );
 
     return (
@@ -483,10 +499,22 @@
           <JourneyHeroPanel />
         </div>
         <div ref={listRef} className="flex flex-col gap-3">
-          {journeySteps.map((step) => (
+          {mobileSteps.map((step) => (
             <JourneyCard key={step.id} step={step} mobile />
           ))}
         </div>
+        {hasMoreMobile && !showAllMobile ? (
+          <button
+            type="button"
+            onClick={() => setShowAllMobile(true)}
+            className="mx-auto inline-flex w-fit items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] py-1.5 pl-4 pr-1.5 font-display text-sm font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
+          >
+            <span>See All Journey</span>
+            <span className="inline-flex h-6 w-8 shrink-0 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
+              <ArrowRightIcon />
+            </span>
+          </button>
+        ) : null}
       </div>
     );
   }

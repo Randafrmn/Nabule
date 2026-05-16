@@ -265,8 +265,8 @@ export function FaqSection() {
       className="w-full bg-background py-16 md:py-24"
     >
       <div className="mx-auto w-full max-w-6xl px-3 md:px-4">
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-8 lg:gap-12">
-          <div className="flex shrink-0 flex-col gap-6 md:max-w-[min(100%,20rem)]">
+        <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between md:gap-8 lg:gap-12">
+          <div className="flex w-full shrink-0 flex-col items-center gap-6 text-center md:max-w-[min(100%,20rem)] md:items-start md:text-left">
             <h2 className="text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] tracking-tight text-[rgba(32,37,39,1)]">
               <span className="block font-display font-medium">Have</span>
               <span className="block font-serif font-normal italic">
@@ -276,7 +276,7 @@ export function FaqSection() {
 
             <Link
               href="#contact"
-              className="inline-flex w-fit items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] mt-4 py-1.5 pl-1.5 pr-4 font-display text-sm font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
+              className="inline-flex w-fit items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] py-1.5 pl-1.5 pr-4 font-display text-sm font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
             >
               <span className="inline-flex h-6 w-8 shrink-0 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
                 <ArrowRightIcon />
@@ -285,7 +285,7 @@ export function FaqSection() {
             </Link>
           </div>
 
-          <div className="min-w-0 flex-1 md:max-w-[min(100%,40rem)] lg:max-w-[42rem]">
+          <div className="w-full min-w-0 md:flex-1 md:max-w-[min(100%,40rem)] lg:max-w-[42rem]">
             <Accordion.Root
               type="multiple"
               value={openValues}

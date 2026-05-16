@@ -6,6 +6,7 @@ import {
   Instrument_Serif,
 } from "next/font/google";
 import "./globals.css";
+import { InitialLoader } from "./_components/layout/InitialLoader";
 
 const figtree = Figtree({
   variable: "--font-figtree",
@@ -55,6 +56,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <InitialLoader />
       </body>
     </html>
   );

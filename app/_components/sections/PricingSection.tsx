@@ -126,22 +126,6 @@ function PlanTag({ name }: { name: string }) {
 function PopularBadge() {
   return (
     <div className="absolute top-0 right-0 z-10 inline-flex items-center rounded-bl-[20px] bg-[rgba(255,255,255,1)] pb-2.5 pl-3 pr-3 pt-2.5">
-      <Image
-        src="/images/RoundedEdge.svg"
-        alt=""
-        aria-hidden
-        width={20}
-        height={20}
-        className="pointer-events-none absolute top-0 right-full rotate-90 -mr-px"
-      />
-      <Image
-        src="/images/RoundedEdge.svg"
-        alt=""
-        aria-hidden
-        width={20}
-        height={20}
-        className="pointer-events-none absolute top-full right-0 rotate-90 -mt-px"
-      />
       <span className="inline-flex rounded-[500px] bg-[rgba(32,37,39,1)] px-3 py-1 font-display text-xs font-medium text-[rgba(255,255,255,1)]">
         Popular
       </span>

@@ -1,4 +1,5 @@
 import { Navbar } from "./_components/layout/Navbar";
+import { HeroScrollRevealNav } from "./_components/layout/HeroScrollRevealNav";
 import { Footer } from "./_components/layout/Footer";
 import { HeroSection } from "./_components/sections/HeroSection";
 import { ClientsSection } from "./_components/sections/ClientsSection";
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <div className="relative mx-auto flex min-h-full w-full max-w-[min(100%,90rem)] flex-1 flex-col">
       <Navbar />
+      <HeroScrollRevealNav />
       <main className="w-full flex-1">
         <HeroSection />
         <ClientsSection />

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ServiceAccordion } from "./ServiceAccordion";
 import { HeroMobileNav } from "./HeroMobileNav";
 
-export function HeroSection() {
+export function HeroSection() {  
   return (
     <section
       id="hero"
@@ -41,16 +41,20 @@ export function HeroSection() {
 
           <div className="absolute inset-0 z-10 flex h-full w-full flex-col text-white">
             <div className="relative flex flex-1 flex-col md:hidden">
-              <div className="shrink-0 pr-5 pt-[4.5rem] text-right">
-                <h1 className="font-headline text-[13vw] leading-none tracking-tight sm:text-5xl">
-                  nabulé
-                </h1>
-                <span className="mt-1 block font-serif text-[8vw] font-normal italic leading-none sm:text-3xl">
-                  design
-                </span>
+              <div className="shrink-0 pt-[4.5rem] text-right">
+                <div className="pr-6">
+                  <h1 className="font-headline text-[13vw] leading-none tracking-tight sm:text-5xl">
+                    nabulé
+                  </h1>
+                </div>
+                <div className="pr-3">
+                  <span className="mt-1 block font-serif text-[8vw] font-normal italic leading-none sm:text-3xl">
+                    design
+                  </span>
+                </div>
               </div>
               <div className="min-h-0 flex-1" aria-hidden="true" />
-              <div className="shrink-0 px-5 pb-8">
+              <div className="shrink-0 pr-3 pl-5 pb-8">
                 <p className="ml-auto max-w-[17rem] text-right font-sans text-sm leading-snug sm:text-base sm:leading-relaxed">
                   Your brand deserves to be unforgettable. We create identities
                   that connect, inspire, and grow.
@@ -73,12 +77,16 @@ export function HeroSection() {
 
               <div className="flex w-full justify-end px-6 pb-32 md:px-12 md:pb-40 lg:px-16">
                 <div className="mr-6 flex flex-col items-end leading-none md:mr-20">
-                  <h1 className="font-headline text-[20vw] tracking-tight md:text-[10vw] lg:text-[14vw]">
-                    nabulé
-                  </h1>
-                  <span className="-mt-2 mr-4 font-serif text-[12vw] font-normal italic leading-[0.9] md:-mt-4 md:mr-20 md:text-[10vw] lg:text-[100px]">
-                    design
-                  </span>
+                  <div className="max-lg:pr-8 lg:pr-0">
+                    <h1 className="font-headline text-[20vw] tracking-tight md:text-[10vw] lg:text-[14vw]">
+                      nabulé
+                    </h1>
+                  </div>
+                  <div className="max-lg:pr-2 lg:pr-0">
+                    <span className="-mt-2 font-serif text-[12vw] font-normal italic leading-[0.9] md:-mt-4 md:text-[10vw] lg:text-[100px]">
+                      design
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

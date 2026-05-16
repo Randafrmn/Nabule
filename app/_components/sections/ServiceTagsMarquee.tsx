@@ -81,7 +81,7 @@ export function ServiceTagsMarquee({
   );
 
   return (
-    <div className="overflow-hidden">
+    <div className="pointer-events-none overflow-hidden">
       <div
         ref={trackRef}
         className="relative flex w-max flex-nowrap items-center gap-2 will-change-transform"

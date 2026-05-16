@@ -185,7 +185,7 @@ function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) 
             <a
               href="#work"
               aria-label={`Open ${project.slug} project`}
-              className="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
+              className="relative z-10 inline-flex h-8 w-10 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
             >
               <svg
                 width="16"
@@ -209,7 +209,7 @@ function SelectedWorkProjectCard({ project }: { project: SelectedWorkProject }) 
         <div className="pointer-events-auto absolute bottom-6 left-4 max-w-[min(100%,20rem)] md:bottom-12 md:left-12 md:max-w-[22rem]">
           <div className="rounded-[16px] bg-[rgba(255,255,255,1)] p-4 md:p-5">
             <div className="inline-flex items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] p-1 pr-4">
-              <span className="inline-flex h-7 w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
+              <span className="inline-flex h-6 w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
                 <svg
                   width="12"
                   height="12"
@@ -298,7 +298,7 @@ export function SelectedWorkSection() {
                 className="inline-flex shrink-0 items-center gap-2 rounded-[500px] bg-[rgba(246,246,246,1)] py-1.5 pl-4 pr-1.5 font-display text-[14px] font-medium text-[rgba(32,37,39,1)] transition-opacity hover:opacity-90"
               >
                 <span>See All Projects</span>
-                <span className="inline-flex h-8 w-8 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
+                <span className="inline-flex h-7 w-8 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)]">
                   <svg
                     width="14"
                     height="14"

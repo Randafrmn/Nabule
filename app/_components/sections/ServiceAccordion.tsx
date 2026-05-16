@@ -50,11 +50,12 @@ function PlusIcon({ ref }: { ref?: React.Ref<SVGSVGElement> }) {
   return (
     <svg
       ref={ref}
-      width="20"
-      height="20"
+      width="18"
+      height="18"
       viewBox="0 0 20 20"
       fill="none"
       aria-hidden="true"
+      className="shrink-0"
       style={{ transformOrigin: "center" }}
     >
       <rect x="9" y="2" width="2" height="16" rx="2" fill="rgba(0,0,0,1)" />
@@ -63,17 +64,95 @@ function PlusIcon({ ref }: { ref?: React.Ref<SVGSVGElement> }) {
   );
 }
 
-function MinusIcon() {
+function MinusIcon({ ref }: { ref?: React.Ref<SVGSVGElement> }) {
   return (
     <svg
-      width="20"
-      height="20"
+      ref={ref}
+      width="18"
+      height="18"
       viewBox="0 0 20 20"
       fill="none"
       aria-hidden="true"
+      className="shrink-0"
+      style={{ transformOrigin: "center" }}
     >
       <rect x="2" y="9" width="16" height="2" rx="2" fill="rgba(0,0,0,1)" />
     </svg>
+  );
+}
+
+function AnimatedToggleIcon({ isOpen }: { isOpen: boolean }) {
+  const plusRef = useRef<SVGSVGElement>(null);
+  const minusRef = useRef<SVGSVGElement>(null);
+  const isFirstRender = useRef(true);
+
+  useGSAP(
+    () => {
+      const plus = plusRef.current;
+      const minus = minusRef.current;
+      if (!plus || !minus) return;
+
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        gsap.set(plus, { rotation: 0, opacity: isOpen ? 0 : 1, scale: 1 });
+        gsap.set(minus, { rotation: 0, opacity: isOpen ? 1 : 0, scale: 1 });
+        return;
+      }
+
+      if (isOpen) {
+        gsap.to(plus, {
+          rotation: 90,
+          opacity: 0,
+          scale: 0.85,
+          duration: 0.4,
+          ease: "power2.inOut",
+        });
+        gsap.fromTo(
+          minus,
+          { rotation: -90, opacity: 0, scale: 0.85 },
+          {
+            rotation: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: "power2.out",
+            delay: 0.08,
+          },
+        );
+      } else {
+        gsap.to(minus, {
+          rotation: 90,
+          opacity: 0,
+          scale: 0.85,
+          duration: 0.35,
+          ease: "power2.inOut",
+        });
+        gsap.fromTo(
+          plus,
+          { rotation: -90, opacity: 0, scale: 0.85 },
+          {
+            rotation: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: "power2.out",
+            delay: 0.08,
+          },
+        );
+      }
+    },
+    { dependencies: [isOpen] },
+  );
+
+  return (
+    <span className="pointer-events-none relative inline-flex h-8 w-10 shrink-0 items-center justify-center">
+      <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <PlusIcon ref={plusRef} />
+      </span>
+      <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <MinusIcon ref={minusRef} />
+      </span>
+    </span>
   );
 }
 
@@ -84,29 +163,8 @@ function ServiceCard({
   service: Service;
   isOpen: boolean;
 }) {
-  const plusIconRef = useRef<SVGSVGElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
-
-  const handleMouseEnter = () => {
-    const icon = plusIconRef.current;
-    if (!icon) return;
-    gsap.to(icon, {
-      rotate: 90,
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  };
-
-  const handleMouseLeave = () => {
-    const icon = plusIconRef.current;
-    if (!icon) return;
-    gsap.to(icon, {
-      rotate: 0,
-      duration: 0.4,
-      ease: "power2.out",
-    });
-  };
 
   useGSAP(
     () => {
@@ -158,45 +216,37 @@ function ServiceCard({
   return (
     <Accordion.Item
       value={service.id}
-      className="group rounded-[16px] bg-white p-4 shadow-sm"
+      className="overflow-hidden rounded-[16px] bg-white shadow-sm"
     >
       <Accordion.Header className="m-0">
-        <Accordion.Trigger
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          className="flex w-full items-center justify-between gap-3 text-left"
-        >
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] px-2 font-display text-[11px] font-medium text-white">
-              {service.id}
+        <Accordion.Trigger className="flex w-full cursor-pointer flex-col p-4 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgba(32,37,39,0.4)]">
+          <span className="flex w-full items-center justify-between gap-3">
+            <span className="flex items-center gap-3">
+              <span className="inline-flex h-5 min-w-6 items-center justify-center rounded-[500px] bg-[rgba(32,37,39,1)] px-2 font-display text-[11px] font-medium text-white">
+                {service.id}
+              </span>
+              <span className="font-display text-[16px] font-medium text-[rgba(32,37,39,1)]">
+                {service.title}
+              </span>
             </span>
-            <span className="font-display text-[16px] font-medium text-[rgba(32,37,39,1)]">
-              {service.title}
+            <span className="inline-flex h-8 w-10 shrink-0 items-center justify-center rounded-[500px] bg-[rgba(255,255,255,1)]">
+              <AnimatedToggleIcon isOpen={isOpen} />
             </span>
-          </div>
-
-          <span className="shrink-0 group-data-[state=open]:hidden">
-            <PlusIcon ref={plusIconRef} />
           </span>
-          <span className="hidden shrink-0 group-data-[state=open]:inline-flex">
-            <MinusIcon />
-          </span>
-        </Accordion.Trigger>
-      </Accordion.Header>
 
-      <Accordion.Content forceMount className="accordion-content-gsap">
-        <div ref={innerRef} className="overflow-hidden">
-          <div className="pt-4">
-            <p className="font-display text-[14px] leading-relaxed text-[rgba(32,37,39,0.6)]">
-              {service.description}
-            </p>
+          <div ref={innerRef} className="overflow-hidden">
+            <div className="pt-4">
+              <p className="font-display text-[14px] leading-relaxed text-[rgba(32,37,39,0.6)]">
+                {service.description}
+              </p>
 
-            <div className="mt-4">
-              <ServiceTagsMarquee tags={service.tags} speed={36} />
+              <div className="mt-4">
+                <ServiceTagsMarquee tags={service.tags} speed={36} />
+              </div>
             </div>
           </div>
-        </div>
-      </Accordion.Content>
+        </Accordion.Trigger>
+      </Accordion.Header>
     </Accordion.Item>
   );
 }
